@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Three-Discipline Connections</title>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        const STEMMultiWayVisualization = () => {
+          const [selectedTriangle, setSelectedTriangle] = useState(null);
+
+          const disciplines = {
+            science: { name: 'Science', color: '#3b82f6', x: 400, y: 50 },
+            technology: { name: 'Technology', color: '#8b5cf6', x: 700, y: 250 },
+            engineering: { name: 'Engineering', color: '#10b981', x: 400, y: 450 },
+            math: { name: 'Mathematics', color: '#ef4444', x: 100, y: 250 }
+          };
+
+          const triangleGroups = [
+            {
+              id: 'tri-stm',
+              disciplines: ['science', 'technology', 'math'],
+              color: '#a855f7',
+              name: 'Science + Technology + Math',
+              connections: [
+                {
+                  field: 'Bioinformatics',
+                  description: 'Combining biological science, computational technology, and statistical mathematics to analyze genetic data and biological systems',
+                  profession: 'Bioinformatics Scientist'
+                },
+                {
+                  field: 'Data Mining',
+                  description: 'Using mathematical algorithms and computational technology to extract patterns from scientific data',
+                  profession: 'Data Mining Specialist'
+                },
+                {
+                  field: 'Meteorology',
+                  description: 'Combining atmospheric science, statistical models, and computational simulations to predict weather',
+                  profession: 'Meteorologist'
+                },
+                {
+                  field: 'Climatology',
+                  description: 'Using climate science, mathematical statistics, and computer modeling to study long-term climate patterns',
+                  profession: 'Climatologist'
+                }
+              ]
+            },
+            {
+              id: 'tri-set',
+              disciplines: ['science', 'engineering', 'technology'],
+              color: '#06b6d4',
+              name: 'Science + Engineering + Technology',
+              connections: [
+                {
+                  field: 'Biomedical Device Development',
+                  description: 'Combining biological science, engineering design, and technology to create medical devices and equipment',
+                  profession: 'Biomedical Device Engineer'
+                },
+                {
+                  field: 'Environmental Monitoring Systems',
+                  description: 'Using environmental science, engineering principles, and sensor technology to monitor ecosystems',
+                  profession: 'Environmental Systems Engineer'
+                },
+                {
+                  field: 'Agricultural Technology',
+                  description: 'Applying agricultural science, engineering solutions, and digital technology to improve farming practices',
+                  profession: 'Agricultural Engineer'
+                }
+              ]
+            },
+            {
+              id: 'tri-etm',
+              disciplines: ['engineering', 'technology', 'math'],
+              color: '#f43f5e',
+              name: 'Engineering + Technology + Math',
+              connections: [
+                {
+                  field: 'Computer-Aided Design (CAD)',
+                  description: 'Using engineering principles, mathematical geometry, and software technology to create technical designs',
+                  profession: 'CAD Engineer'
+                },
+                {
+                  field: 'Network Engineering',
+                  description: 'Applying engineering concepts, mathematical optimization, and networking technology to design communication systems',
+                  profession: 'Network Engineer'
+                },
+                {
+                  field: 'Quality Control Engineering',
+                  description: 'Using engineering standards, statistical analysis, and testing technology to ensure product quality',
+                  profession: 'Quality Control Engineer'
+                }
+              ]
+            },
+            {
+              id: 'tri-sem',
+              disciplines: ['science', 'engineering', 'math'],
+              color: '#eab308',
+              name: 'Science + Engineering + Math',
+              connections: [
+                {
+                  field: 'Materials Science',
+                  description: 'Combining physics and chemistry with engineering and mathematical modeling to develop new materials',
+                  profession: 'Materials Scientist'
+                },
+                {
+                  field: 'Aerospace Dynamics',
+                  description: 'Using physics, engineering principles, and mathematical calculus to design flight systems',
+                  profession: 'Aerospace Dynamicist'
+                },
+                {
+                  field: 'Chemical Process Optimization',
+                  description: 'Applying chemistry, engineering design, and mathematical optimization to improve industrial processes',
+                  profession: 'Process Engineer'
+                }
+              ]
+            }
+          ];
+
+          const getTrianglePoints = (disciplineIds) => {
+            const points = disciplineIds.map(id => disciplines[id]);
+            return points;
+          };
+
+          const getTriangleCenter = (disciplineIds) => {
+            const points = getTrianglePoints(disciplineIds);
+            const x = (points[0].x + points[1].x + points[2].x) / 3;
+            const y = (points[0].y + points[1].y + points[2].y) / 3;
+            return { x, y };
+          };
+
+          const getTrianglePath = (disciplineIds) => {
+            const points = disciplineIds.map(id => disciplines[id]);
+            return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y} L ${points[2].x} ${points[2].y} Z`;
+          };
+
+          return React.createElement('div', { 
+            className: "w-full min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex flex-col items-center justify-start p-4 overflow-auto" 
+          },
+            React.createElement('div', { className: "my-4 text-center" },
+              React.createElement('h1', { className: "text-3xl font-bold text-white mb-2" }, 'STEM Three-Discipline Connections'),
+              React.createElement('p', { className: "text-slate-300" }, 'Click on triangles to see professions requiring 3 STEM disciplines')
+            ),
+            React.createElement('div', { className: "relative bg-slate-800 rounded-2xl shadow-2xl p-8" },
+              React.createElement('svg', { width: "800", height: "520", className: "mb-4" },
+                selectedTriangle && React.createElement('g', null,
+                  React.createElement('path', {
+                    d: getTrianglePath(selectedTriangle.disciplines),
+                    fill: `${selectedTriangle.color}30`,
+                    stroke: selectedTriangle.color,
+                    strokeWidth: "4",
+                    className: "transition-all"
+                  })
+                ),
+                triangleGroups.map(triangle =>
+                  React.createElement('g', { key: `clickable-${triangle.id}` },
+                    React.createElement('path', {
+                      d: getTrianglePath(triangle.disciplines),
+                      fill: "transparent",
+                      stroke: "transparent",
+                      strokeWidth: "30",
+                      className: "cursor-pointer",
+                      onClick: () => setSelectedTriangle(triangle)
+                    })
+                  )
+                ),
+                triangleGroups.map(triangle => {
+                  const points = triangle.disciplines.map(id => disciplines[id]);
+                  const isSelected = selectedTriangle?.id === triangle.id;
+                  return React.createElement('g', { key: `lines-${triangle.id}` },
+                    React.createElement('line', {
+                      x1: points[0].x, y1: points[0].y,
+                      x2: points[1].x, y2: points[1].y,
+                      stroke: isSelected ? triangle.color : '#475569',
+                      strokeWidth: isSelected ? '2' : '1',
+                      strokeDasharray: "3,3",
+                      opacity: isSelected ? '0.6' : '0.3',
+                      className: "pointer-events-none transition-all"
+                    }),
+                    React.createElement('line', {
+                      x1: points[1].x, y1: points[1].y,
+                      x2: points[2].x, y2: points[2].y,
+                      stroke: isSelected ? triangle.color : '#475569',
+                      strokeWidth: isSelected ? '2' : '1',
+                      strokeDasharray: "3,3",
+                      opacity: isSelected ? '0.6' : '0.3',
+                      className: "pointer-events-none transition-all"
+                    }),
+                    React.createElement('line', {
+                      x1: points[2].x, y1: points[2].y,
+                      x2: points[0].x, y2: points[0].y,
+                      stroke: isSelected ? triangle.color : '#475569',
+                      strokeWidth: isSelected ? '2' : '1',
+                      strokeDasharray: "3,3",
+                      opacity: isSelected ? '0.6' : '0.3',
+                      className: "pointer-events-none transition-all"
+                    })
+                  );
+                }),
+                Object.entries(disciplines).map(([id, disc]) =>
+                  React.createElement('g', { key: id },
+                    React.createElement('circle', {
+                      cx: disc.x, cy: disc.y, r: "50",
+                      fill: disc.color,
+                      className: "drop-shadow-lg"
+                    }),
+                    React.createElement('text', {
+                      x: disc.x, y: disc.y,
+                      textAnchor: "middle",
+                      dominantBaseline: "middle",
+                      className: "text-white font-bold text-sm pointer-events-none",
+                      fill: "white"
+                    }, disc.name)
+                  )
+                )
+              ),
+              React.createElement('div', { className: "grid grid-cols-2 gap-3 mb-4" },
+                triangleGroups.map(triangle =>
+                  React.createElement('button', {
+                    key: triangle.id,
+                    onClick: () => setSelectedTriangle(triangle),
+                    className: `p-4 rounded-lg transition-all text-left ${
+                      selectedTriangle?.id === triangle.id
+                        ? 'ring-4 ring-amber-400 bg-slate-700'
+                        : 'bg-slate-700 hover:bg-slate-600'
+                    }`
+                  },
+                    React.createElement('div', { className: "flex items-center gap-2 mb-2" },
+                      React.createElement('span', {
+                        className: "w-4 h-4 rounded-full",
+                        style: { backgroundColor: triangle.color }
+                      }),
+                      React.createElement('span', { className: "text-white font-semibold text-sm" },
+                        `${triangle.connections.length} profession${triangle.connections.length > 1 ? 's' : ''}`
+                      )
+                    ),
+                    React.createElement('p', { className: "text-slate-300 text-xs" }, triangle.name)
+                  )
+                )
+              ),
+              React.createElement('div', { className: "bg-slate-700 rounded-lg p-4 min-h-32 max-h-96 overflow-y-auto" },
+                selectedTriangle ? React.createElement('div', null,
+                  React.createElement('h3', {
+                    className: "text-2xl font-bold mb-3",
+                    style: { color: selectedTriangle.color }
+                  }, selectedTriangle.name),
+                  React.createElement('p', { className: "text-slate-300 text-xs mb-4" },
+                    `${selectedTriangle.connections.length} profession${selectedTriangle.connections.length > 1 ? 's' : ''} requiring these three disciplines`
+                  ),
+                  selectedTriangle.connections.map((conn, idx) =>
+                    React.createElement('div', {
+                      key: idx,
+                      className: idx > 0 ? 'mt-4 pt-4 border-t border-slate-600' : ''
+                    },
+                      React.createElement('h4', { className: "text-lg font-bold text-amber-400 mb-1" }, conn.field),
+                      React.createElement('p', { className: "text-emerald-300 font-semibold text-sm mb-1" },
+                        `Profession: ${conn.profession}`
+                      ),
+                      React.createElement('p', { className: "text-slate-300 text-sm" }, conn.description)
+                    )
+                  )
+                ) : React.createElement('div', { className: "text-center text-slate-400" },
+                  React.createElement('p', { className: "text-base mb-3" }, 'Select a triangle to see three-discipline professions'),
+                  React.createElement('div', { className: "grid grid-cols-2 gap-2 text-xs" },
+                    triangleGroups.map(triangle =>
+                      React.createElement('div', { key: triangle.id },
+                        React.createElement('span', {
+                          className: "inline-block w-3 h-3 rounded-full mr-1",
+                          style: { backgroundColor: triangle.color }
+                        }),
+                        triangle.name
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+            React.createElement('div', { className: "my-4 text-slate-400 text-xs text-center max-w-2xl" },
+              React.createElement('p', null, 'This visualization shows professions that require three STEM disciplines working together.'),
+              React.createElement('p', { className: "mt-1" }, 'Each colored triangle represents a unique combination of three disciplines.')
+            )
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(STEMMultiWayVisualization));
+    </script>
+</body>
+</html>
